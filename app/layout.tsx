@@ -7,14 +7,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen bg-gray-100">
         <AuthContext>
-          <Header/>
-          <main>
+          {/* <main className="max-w-4xl mx-auto px-4 py-6"> */}
             {children}
-          </main>
+          {/* </main> */}
         </AuthContext>
       </body>
     </html>
