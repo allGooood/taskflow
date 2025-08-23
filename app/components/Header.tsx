@@ -19,7 +19,7 @@ export default function Header() {
         <nav>
           {session ? (
             <button 
-              className="cursor-pointe text-gray-600 hover:text-indigo-600" 
+              className="cursor-pointer text-gray-600 hover:text-indigo-600" 
               onClick={() => signOut()}
               // onClick={() => signOut({ callbackUrl: '/' })}
             >

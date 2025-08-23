@@ -1,6 +1,7 @@
 import "./globals.css";
 import Header from "./components/Header";
 import AuthContext from "./context/AuthContext";
+import Dashboard from "./components/Dashboard";
 
 export default function RootLayout({
   children,
