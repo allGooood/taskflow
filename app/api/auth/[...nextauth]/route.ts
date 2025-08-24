@@ -21,7 +21,6 @@ const authOptions: AuthOptions = {
     //JWT 만들때 실행
     jwt: async ({ token, user }) => {
       console.log('-----jwt-----')
-      console.log(token);
 
       // if (user) {
       //     token.user = {};
@@ -33,10 +32,8 @@ const authOptions: AuthOptions = {
 
     //유저 Session 조회 시 실행
     session: async ({ session, token }) => {
-
       console.log('-----session-----')
       console.log(session);
-      console.log(token);
 
       // session.user = token.user;
       return session;
