@@ -13,18 +13,18 @@ export async function POST(req: Request) {
         );
     }
 
-    const {content} = await req.json();
+    const {content, start, end} = await req.json();
     const task = await prisma.task.create({
         data: {
           content,
+          start,
+          end,
           userId: user.id,
         },
     });
 
     return NextResponse.json({
         title: task.content,
-        start: task.createdAt,
-        end: task.createdAt,
         ...task
     })
 }
@@ -47,31 +47,43 @@ export async function GET(req: Request){
         where: {
             isDeleted: false,
             userId: user.id,
-            createdAt: {
+            start: {
                 gte: start,
+            },
+            end: {
                 lte: end,
-            }
+            },
+            // createdAt: {
+            //     gte: start,
+            //     lte: end,
+            // }
         },
         select: {
             id: true,
             content: true,
             isCompleted: true,
             createdAt: true,
+            start: true,
+            end: true,
         },
         orderBy: {
             createdAt: "desc"
         }
     })
 
-    const res = tasks.map(({ content, createdAt, ...field }) => ({
+    const res = tasks.map(({ content, ...field }) => ({
         ...field,
-        start: createdAt,
-        end: createdAt,
         title: content,
     }));
 
+    console.log(start);
+    console.log(end);
+
+    console.log(res);
+
     return NextResponse.json(res);
 }
+
 
 
 
@@ -106,10 +118,9 @@ export async function GET(req: Request){
 //     })
 // }
 
-// export async function GET(){
+// export async function GET(req: Request){
 
 //     const user = await getCurrentUser();
-
 //     if(!user){
 //         return NextResponse.json(
 //             { error: "Unauthorized" }, 
@@ -117,11 +128,18 @@ export async function GET(req: Request){
 //         );
 //     }
 
+//     const { searchParams } = new URL(req.url);
+//     const start = new Date(searchParams.get("start")!);
+//     const end = new Date(searchParams.get("end")!);
+
 //     const tasks = await prisma.task.findMany({
 //         where: {
 //             isDeleted: false,
-//             // createdAt: new Date(),
 //             userId: user.id,
+//             createdAt: {
+//                 gte: start,
+//                 lte: end,
+//             }
 //         },
 //         select: {
 //             id: true,
@@ -140,6 +158,11 @@ export async function GET(req: Request){
 //         end: createdAt,
 //         title: content,
 //     }));
+
+//     console.log(start);
+//     console.log(start);
+
+//     console.log(res);
 
 //     return NextResponse.json(res);
 // }

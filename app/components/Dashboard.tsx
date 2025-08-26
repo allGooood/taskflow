@@ -7,7 +7,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import React from "react";
 import Toolbar from "./big-calendar/Toolbar";
 import Button from "./common/Button";
-import { eachDayOfInterval, endOfMonth, format, startOfMonth } from "date-fns";
+import { eachDayOfInterval, endOfDay, endOfMonth, format, isWithinInterval, startOfDay, startOfMonth } from "date-fns";
 import { ko } from "date-fns/locale";
 
 interface Task {
@@ -23,7 +23,7 @@ export default function Home() {
     const localizer = momentLocalizer(moment)
     const [date, setDate] = useState(new Date());
     
-    const [tasks, setTasks] = useState<Task[]>([]);
+    const [monthlyTasks, setMonthlyTasks] = useState<Task[]>([]);
     const [newTask, setNewTask] = useState("");
 
     const { components, defaultDate, views } = useMemo(
@@ -36,24 +36,37 @@ export default function Home() {
         }),[]
     );
 
-    const onNavigate = useCallback((newDate) => setDate(newDate), [setDate]);
+    const onNavigate = useCallback((newDate: Date) => setDate(newDate), [setDate]);
 
     useEffect(() => {
-        const fetchTasks = async () => {
+        console.log(date)
+    },[date])
+
+    useEffect(() => {
+        const fetchMonthly = async () => {
             const start = startOfMonth(date);
             const end = endOfMonth(date);
 
             const res = await fetch(`/api/tasks?start=${start.toISOString()}&end=${end.toISOString()}`);
             if (res.ok) {
                 const data = await res.json();
-                console.log(data);
-                setTasks(data.map((task: any) => task));
+                setMonthlyTasks(data.map((task: Task) => task));
             } else{
-                console.log("error")
+                console.log("error");
             }          
         };
-        fetchTasks();
-    }, []);
+        fetchMonthly();
+
+    }, [date.getMonth]);
+
+    const dailyTasks = useMemo(() => {
+        return monthlyTasks.filter((task) =>
+          isWithinInterval(new Date(task.start), {
+            start: startOfDay(date),
+            end: endOfDay(date),
+          })
+        );
+    }, [monthlyTasks, date]);
 
     const createTask = async () => {
         if(!newTask.trim()) return;
@@ -62,7 +75,11 @@ export default function Home() {
             const res = await fetch("/api/tasks", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({content: newTask})
+                body: JSON.stringify({
+                    content: newTask,
+                    start: date,
+                    end: date,
+                })
             });
 
             if (!res.ok) {
@@ -72,7 +89,7 @@ export default function Home() {
 
             const savedTask = await res.json();
 
-            setTasks([savedTask, ...tasks]);
+            setMonthlyTasks([savedTask, ...monthlyTasks]);
             setNewTask("");
 
         } catch(err){
@@ -94,7 +111,7 @@ export default function Home() {
             const data = res.json();
 
             // setTasks(tasks.filter((_, i) => i !== idx))
-            setTasks((prev) => prev.filter((task) => task.id !== id));
+            setMonthlyTasks((prev) => prev.filter((task) => task.id !== id));
         } catch(err){
 
         }
@@ -113,7 +130,7 @@ export default function Home() {
                     localizer={localizer}
                     startAccessor="start"
                     endAccessor="end"
-                    events={tasks}
+                    events={monthlyTasks}
                     views={views}
                     // timeslots={2}
                 />
@@ -145,9 +162,9 @@ export default function Home() {
 
                 {/* Task List */}
                 <ul className="space-y-2">
-                    {tasks.map((task, idx) => (
+                    {dailyTasks.map((task) => (
                         <li
-                            key={idx}
+                            key={task.id}
                             className="p-3 border rounded-lg flex justify-between items-center"
                         >
                             <span>{task.title}</span>
@@ -166,6 +183,7 @@ export default function Home() {
   );
 }
 
+
 // 'use client';
 
 // import { useCallback, useEffect, useMemo, useState } from "react";
@@ -175,7 +193,7 @@ export default function Home() {
 // import React from "react";
 // import Toolbar from "./big-calendar/Toolbar";
 // import Button from "./common/Button";
-// import { eachDayOfInterval, endOfMonth, format } from "date-fns";
+// import { eachDayOfInterval, endOfDay, endOfMonth, format, startOfDay, startOfMonth } from "date-fns";
 // import { ko } from "date-fns/locale";
 
 // interface Task {
@@ -191,6 +209,7 @@ export default function Home() {
 //     const localizer = momentLocalizer(moment)
 //     const [date, setDate] = useState(new Date());
     
+//     const [task, setTask] = useState<Task>();
 //     const [tasks, setTasks] = useState<Task[]>([]);
 //     const [newTask, setNewTask] = useState("");
 
@@ -204,21 +223,42 @@ export default function Home() {
 //         }),[]
 //     );
 
-//     const onNavigate = useCallback((newDate) => setDate(newDate), [setDate]);
+//     const onNavigate = useCallback((newDate: Date) => setDate(newDate), [setDate]);
 
 //     useEffect(() => {
-//         const fetchTasks = async () => {
-//             const res = await fetch("/api/tasks");
+//         const fetchMonthly = async () => {
+//             const start = startOfMonth(date);
+//             const end = endOfMonth(date);
+
+//             const res = await fetch(`/api/tasks?start=${start.toISOString()}&end=${end.toISOString()}`);
 //             if (res.ok) {
 //                 const data = await res.json();
-//                 console.log(data);
-//                 setTasks(data.map((task: any) => task));
+//                 setTasks(data.map((task: Task) => task));
 //             } else{
 //                 console.log("error")
 //             }          
 //         };
-//         fetchTasks();
-//     }, []);
+//         fetchMonthly();
+
+//     }, [date.getMonth]);
+
+//     useEffect(() => {
+//         const fetchDaily = async () => {
+//             const start = startOfDay(date);
+//             const end = endOfDay(date);
+
+//             const res = await fetch(`/api/tasks?start=${start.toISOString()}&end=${end.toISOString()}`);
+//             if (res.ok) {
+//                 const data = await res.json();
+//                 console.log(data)
+//                 setTask(data);
+//             } else{
+//                 console.log("error")
+//             }       
+//         }
+//         fetchDaily();
+
+//     },[date]);
 
 //     const createTask = async () => {
 //         if(!newTask.trim()) return;

@@ -80,6 +80,8 @@ model Task {
   // dueDate     DateTime?
   userId String
   isDeleted  Boolean @default(false)
+  start   DateTime?
+  end     DateTime?
 
   user   User   @relation(fields: [userId], references: [id])
 
