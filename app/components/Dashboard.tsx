@@ -96,7 +96,7 @@ export default function Home() {
     const onDelete = async (id: string) => {
         try{
             const res = await fetch(`/api/tasks/${id}`, {
-                method: "PATCH",
+                method: "DELETE",
                 headers: { "Content-Type": "application/json" },
             });
 
@@ -113,8 +113,28 @@ export default function Home() {
         }
     }
 
-    const handleProgress = async (id: string) => {
+    const handleProgress = async (id: string, currentValue: boolean) => {
+        try{
+            const res = await fetch(`/api/tasks/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ isCompleted: !currentValue }),
+            });
+            
+            if (!res.ok) {
+                throw new Error("Failed to delete task");
+            }
 
+            const data = await res.json();
+
+            setMonthlyTasks((prev) =>
+                prev.map((task) =>
+                    task.id === id ? { ...task, isCompleted: data.isCompleted } : task)
+            );
+
+        }catch(err){
+            alert(err);
+        }
     }
 
 	return (
@@ -177,7 +197,7 @@ export default function Home() {
                                         type="checkbox"
                                         className="w-6 h-6 cursor-pointer accent-indigo-500 rounded-md"
                                         checked={task.isCompleted}
-                                        onClick={() => handleProgress(task.id)}
+                                        onChange={() => handleProgress(task.id, task.isCompleted)}
                                     />
                                     <span className={task.isCompleted ? "line-through text-gray-400" : "text-gray-700"}>{task.title}</span>
                                 </div>
