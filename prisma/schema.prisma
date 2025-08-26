@@ -77,7 +77,6 @@ model Task {
   content       String
   // description String?
   isCompleted Boolean  @default(false)
-  // dueDate     DateTime?
   userId String
   isDeleted  Boolean @default(false)
   start   DateTime?
