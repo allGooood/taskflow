@@ -25,13 +25,13 @@ export default function Home() {
               >
                 로그인
               </Button>
-              <Button
+              {/* <Button
                 variant="outline"
                 className="px-5 py-3"
                 onClick={() => window.location.href = '/auth/signup'}
               >
                 회원가입
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>

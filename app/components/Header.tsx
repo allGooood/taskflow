@@ -36,11 +36,11 @@ export default function Header() {
               >
                 로그인
               </Button>
-              <Button 
+              {/* <Button 
                 onClick={() => router.push('/auth/signup')}
               >
                 회원가입
-              </Button>
+              </Button> */}
             </>
           )}
         </nav>
