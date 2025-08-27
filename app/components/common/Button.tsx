@@ -21,14 +21,14 @@ const Button = ({
     className = ""
 }: ButtonProps) => {
 
-    const baseStyle = `rounded-lg px-4 py-2 transition-colors
+    const baseStyle = `rounded-xl px-4 py-2 transition-colors
                         ${disabled ? "bg-gray-200" : ""}
                         ${disabled ? "cursor-auto" : "cursor-pointer"}
                     `;
     
     const variants = {
-        primary: "bg-indigo-600 text-white hover:bg-indigo-700",
-        outline: "border-1",
+        primary: "text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-md hover:shadow-lg hover:from-indigo-500 hover:to-violet-500 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/70 active:scale-[0.98]",
+        outline: "border border-indigo-500/70 text-indigo-700 hover:text-indigo-800 hover:bg-indigo-50 transition shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400/70 active:scale-[0.98]",
     }
 
     return (

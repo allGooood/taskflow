@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import Dashboard from "../components/Dashboard";
+import Button from "../components/common/Button";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -18,18 +19,19 @@ export default function Home() {
             </h2>
             <p className="text-gray-600 mb-8">로그인 후 일정과 할 일을 쉽고 아름답게 관리해보세요.</p>
             <div className="flex items-center justify-center gap-3">
-              <button
-                className="px-5 py-3 rounded-xl text-white bg-gradient-to-r from-indigo-600 to-violet-600 shadow-md hover:shadow-lg hover:from-indigo-500 hover:to-violet-500 transition active:scale-[0.98]"
+              <Button
+                className="px-5 py-3"
                 onClick={() => window.location.href = '/auth/signin'}
               >
                 로그인
-              </button>
-              <button
-                className="px-5 py-3 rounded-xl border border-indigo-500/70 text-indigo-700 hover:text-indigo-800 hover:bg-indigo-50 transition shadow-sm active:scale-[0.98]"
+              </Button>
+              <Button
+                variant="outline"
+                className="px-5 py-3"
                 onClick={() => window.location.href = '/auth/signup'}
               >
                 회원가입
-              </button>
+              </Button>
             </div>
           </div>
         </div>
