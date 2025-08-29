@@ -12,7 +12,7 @@ export default function Home() {
       {session ? (
         <Dashboard />
       ) : (
-        <div className="min-h-[60vh] flex items-center justify-center">
+        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center">
           <div className="text-center px-6 py-12 rounded-3xl bg-gradient-to-br from-white/80 to-white/60 backdrop-blur-md border border-white/50 shadow-[0_8px_30px_rgba(0,0,0,0.06)]">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 mb-4">
               당신의 하루를 더 스마트하게
