@@ -5,10 +5,24 @@ import { FcGoogle } from "react-icons/fc";
 import { AiFillGithub } from 'react-icons/ai';
 import Input from "@/app/components/common/Input";
 import Button from "@/app/components/common/Button";
+import Loader from "@/app/components/common/Loader";
 import Link from "next/link";
+import { useState } from "react";
 
 
 export default function SigninPage() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+      await signIn("google", { callbackUrl: "/" });
+    } catch (error) {
+      console.error("Sign in error:", error);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
 
@@ -22,11 +36,16 @@ export default function SigninPage() {
       <hr className="border-gray-500 my-3"/> */}
 
       <button
-        onClick={() => signIn("google", { callbackUrl: "/" })}
-        className="w-full py-2 px-4 border rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 transition cursor-pointer"
+        onClick={handleGoogleSignIn}
+        disabled={isLoading}
+        className="w-full py-2 px-4 border rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <FcGoogle className="w-5 h-5" />
-        Google 로그인
+        {isLoading ? (
+          <Loader size="sm" />
+        ) : (
+          <FcGoogle className="w-5 h-5" />
+        )}
+        {isLoading ? "로그인 중..." : "Google 로그인"}
       </button>
 
       {/* <button

@@ -3,9 +3,10 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Button from "./common/Button";
+import Loader from "./common/Loader";
 
 export default function Header() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   return (
@@ -22,7 +23,9 @@ export default function Header() {
 
         {/* 네비게이션 */}
         <nav className="flex items-center space-x-4">
-          {session ? (
+          {status === "loading" ? (
+            <Loader size="sm" />
+          ) : session ? (
             <Button 
               onClick={() => signOut()}
             >

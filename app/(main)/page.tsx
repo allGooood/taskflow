@@ -3,13 +3,18 @@
 import { useSession } from "next-auth/react";
 import Dashboard from "../components/Dashboard";
 import Button from "../components/common/Button";
+import Loader from "../components/common/Loader";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   return (
     <>
-      {session ? (
+      {status === "loading" ? (
+        <div className="min-h-[calc(100vh-80px)] flex items-center justify-center">
+          <Loader size="lg" />
+        </div>
+      ) : session ? (
         <Dashboard />
       ) : (
         <div className="min-h-[calc(100vh-80px)] flex items-center justify-center">

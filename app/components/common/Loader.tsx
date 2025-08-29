@@ -1,11 +1,22 @@
 import React from 'react';
 
-const Loader = () => {
-    return (
-        <div>
-            
-        </div>
-    );
+interface LoaderProps {
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+}
+
+const Loader = ({ size = 'md', className = '' }: LoaderProps) => {
+  const sizeClasses = {
+    sm: 'w-4 h-4',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12'
+  };
+
+  return (
+    <div className={`flex items-center justify-center ${className}`}>
+      <div className={`${sizeClasses[size]} animate-spin rounded-full border-2 border-gray-200 border-t-indigo-600`}></div>
+    </div>
+  );
 };
 
 export default Loader;
