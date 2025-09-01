@@ -5,7 +5,7 @@
 Taskflow는 개인 포트폴리오 목적으로 제작한 간단한 할 일 관리 웹앱입니다.  
 Next.js를 기반으로 기본적인 **할 일 추가/수정/삭제/완료** 기능을 제공하며, Vercel에 배포하여 언제 어디서나 접근할 수 있습니다.
 
-👉 [Demo 보러가기]([https://your-vercel-link.vercel.app](https://taskflow-6hrvuvsfn-minkyeongs-projects-767cb0cd.vercel.app/ ))
+👉 [Demo 보러가기](https://your-vercel-link.vercel.app](https://taskflow-6hrvuvsfn-minkyeongs-projects-767cb0cd.vercel.app/)
 
 ## ⚙️ 기술 스택
 - **Frontend/Framework**: Next.js, React, TypeScript
